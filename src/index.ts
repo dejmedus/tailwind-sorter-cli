@@ -9,32 +9,32 @@ import getClassesMap from "./getClassesMap.js";
 program
   .name("tailwind-sorter")
   .description("Sort Tailwind classes in files")
-  .version("1.0.0", "-v, --version", "output the current version")
-  .option("-i, --include <pattern>", "Include glob (required)")
-  .option("-x, --exclude <pattern>", "Exclude glob")
+  .version("1.0.0", "-v, --version", "Output the current version")
+  .option("-i, --include <pattern>", "Include path (required)")
+  .option("-x, --exclude <pattern>", "Exclude path")
   .option("-d, --debug", "Enable debug mode")
   .parse();
 
-const opts = program.opts();
+const options = program.opts();
 
-if (!opts.include) {
-  console.error("Error: --include <pattern> is required.");
+if (!options.include) {
+  error("Error: --include <pattern> is required.");
   process.exit(1);
 }
 
-const globOptions: {
+const pathOptions: {
   ignore?: string[];
   onlyFiles?: boolean;
 } = {
   onlyFiles: true,
 };
 
-if (opts.exclude) {
-  const excludePatterns = opts.exclude
-    ? opts.exclude.split(",").map((s: string) => s.trim())
+if (options.exclude) {
+  const excludePatterns = options.exclude
+    ? options.exclude.split(",").map((path: string) => path.trim())
     : [];
 
-  globOptions.ignore = [
+  pathOptions.ignore = [
     ...excludePatterns,
     "**/node_modules/**",
     "**/dist/**",
@@ -44,8 +44,7 @@ if (opts.exclude) {
   ];
 }
 
-const files = await fg(opts.include, globOptions);
-
+const files = await fg(options.include, pathOptions);
 const { classesMap, pseudoSortOrder } = getClassesMap();
 
 for (const file of files) {
@@ -57,7 +56,19 @@ for (const file of files) {
 }
 
 function debug(message: string) {
-  if (opts.debug) {
-    console.log(`\x1b[90m${message}\x1b[0m`);
+  if (!options.debug) {
+    return;
   }
+
+  console.log(`\x1b[90m${message}\x1b[0m`);
+}
+
+function error(message: string) {
+  if (options.debug) {
+    console.error(`\x1b[31mError: ${message}\x1b[0m`);
+  } else {
+    errorBox(message);
+  }
+
+  process.exit(1);
 }
