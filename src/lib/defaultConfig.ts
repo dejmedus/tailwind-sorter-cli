@@ -1,4 +1,36 @@
-export const defaultConfig = {
+export interface Config {
+  include?: string[];
+  exclude?: string[];
+  customPrefixes: string[];
+  categoryOrder: {
+    sortOrder: string[];
+  };
+  pseudoClassesOrder: {
+    sortOrder: string[];
+  };
+  categories: Record<string, string[]>;
+}
+
+export const defaultConfig: Config = {
+  include: [],
+  exclude: [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/out/**",
+    "**/test/**",
+    "**/coverage/**",
+    "**/vendor/**",
+    "**/public/**",
+    "**/static/**",
+    "**/*.min.**",
+    "**/*.bundle.**",
+    "**/*.map",
+    "**/*.d.ts",
+    "**/*.spec.**",
+    "**/*.test.**",
+  ],
+  customPrefixes: ["twMerge(", "clsx(", "cva("],
   categoryOrder: {
     sortOrder: [
       "box",
@@ -546,5 +578,6 @@ export const defaultSortOrder = defaultConfig.categoryOrder.sortOrder;
 export const defaultPseudoSortOrder =
   defaultConfig.pseudoClassesOrder.sortOrder;
 
-export const defaultCustomPrefixes = ["twMerge(", "clsx(", "cva("];
-export const defaultSortOnSave = true;
+export const defaultCustomPrefixes = defaultConfig.customPrefixes;
+export const defaultExclude = defaultConfig.exclude;
+export const defaultInclude = defaultConfig.include;

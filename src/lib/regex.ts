@@ -4,8 +4,14 @@
  *
  * @returns The regex pattern
  */
-export function createRegex() {
-  const prefixes = `(class=|className=)`;
+export function createRegex(customPrefixes: string[]) {
+  // custom prefix should be a string + a delimiter
+  // defaults: ["twMerge(", "clsx(", "cva("];
+  const escapedPrefixes = customPrefixes
+    .map((prefix) => prefix.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&"))
+    .join("|");
+
+  const prefixes = `(${escapedPrefixes}|class=|className=)`;
 
   // regex101 example: https://regex101.com/r/IfViQ8/4
   // (?<=\\s|{|^) prefix should be preceded by a space, bracket, or the start of the string

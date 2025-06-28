@@ -2,7 +2,7 @@
 <h2>Tailwind Sorter CLI</h2>
 </div>
 
-A tool to sort Tailwind classes in your project files
+A tool to sort Tailwind classes in files.
 
 #### Installation
 
@@ -11,27 +11,53 @@ npm install -g tailwind-sorter
 # or
 npx tailwind-sorter
 ```
-
 #### Usage
 
 ```bash
-tailwind-sorter [options]
+tailwind-sorter
 ```
-#### Options
+- `-v`, `--version`: Show the version of Tailwind Sorter
+- `-h`, `--help`: Show help information for Tailwind Sorter
 
-- `-i`, `--include <pattern>`: Glob pattern for files to include
-- `-x`, `--exclude <pattern>`: Glob pattern for files to exclude
-- `-h`, `--help`: Show help message
+#### Sort Tailwind classes in files
+
+```bash
+tailwind-sorter sort [options]
+```
+- `-i`, `--include <pattern...>`: Glob pattern(s) for files to include
+- `-x`, `--exclude <pattern...>`: Glob pattern(s) for files to exclude
 - `-d`, `--debug`: Enable debug mode
-- `-v`, `--version`: Show version number
+
+
+#### Create default config file
+
+
+```bash
+tailwind-sorter init [options]
+```
+
+If a config file exists and includes a valid sort order, that sort order will be used instead of the default.
+If no include/exclude flags are used as part of a sort command, the config file's patterns will be used.
+
+- `-d`, `--debug`: Enable debug mode
 
 #### Examples
-```bash
-# .html files
-tailwind-sorter -i "*.html"
 
-# .jsx and .tsx files, excluding tests
-tailwind-sorter -i "**/*.{jsx,tsx}" -x "**/tests"
+```bash
+# create default config file
+tailwind-sorter init
+
+# sort all .html files
+tailwind-sorter sort -i "**/*.html"
+
+# sort .jsx and .tsx files, excluding tests
+tailwind-sorter sort -i "**/*.jsx" -i "**/*.tsx" -x "**/tests/**"
+
+# sort multiple file types with a single glob
+tailwind-sorter sort -i "**/*.{js,jsx,ts,tsx,html}"
+
+# enable debug mode
+tailwind-sorter sort -i "**/*.html" -i "**/*.css" --debug
 ```
 
 #### Sorting

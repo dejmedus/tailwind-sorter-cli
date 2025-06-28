@@ -3,7 +3,7 @@ import {
   createRegex,
   colonRegex,
   dynamicSyntaxMarkers,
-} from "./lib/regex.js";
+} from "../lib/regex.js";
 
 /**
  * Sorts the tailwind classes in the given file text based on the provided sort config.
@@ -16,14 +16,15 @@ import {
 export default function sortTailwind(
   text: string,
   sortConfig: { [key: string]: number },
-  pseudoClasses: string[]
+  pseudoClasses: string[],
+  customPrefixes: string[]
 ) {
   const applyRegex = createApplyRegex();
   text = text.replace(applyRegex, (match, classesGroup) => {
     return sortFoundTailwind(match, classesGroup, sortConfig, pseudoClasses);
   });
 
-  const regex = createRegex();
+  const regex = createRegex(customPrefixes);
   text = text.replace(
     regex,
     (

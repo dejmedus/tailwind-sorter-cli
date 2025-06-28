@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Tailwind Sorter Config",
+  "type": "object",
+  "properties": {
+    "include": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Glob patterns for files to include"
+    },
+    "exclude": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Glob patterns for files to exclude"
+    },
+    "customPrefixes": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Custom prefixes to identify tailwind class strings. Example: clsx( or tw="
+    },
+    "categoryOrder": {
+      "type": "object",
+      "properties": {
+        "sortOrder": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "description": "Sort order of categories"
+    },
+    "pseudoClassesOrder": {
+      "type": "object",
+      "properties": {
+        "sortOrder": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "description": "Sort order of pseudo-classes"
+    },
+    "categories": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+      "description": "List of classes in each category"
+    }
+  },
+  "additionalProperties": false
+}
