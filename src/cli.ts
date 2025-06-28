@@ -1,11 +1,12 @@
 import fg from "fast-glob";
 import fs from "fs/promises";
 import path from "path";
+
 import getClassesMap from "./utils/getClassesMap.js";
 import getOptions from "./utils/getOptions.js";
+import logger from "./utils/logger.js";
 import sortTailwind from "./utils/sortTailwind.js";
 import { defaultConfig, Config } from "./lib/defaultConfig.js";
-import logger from "./utils/logger.js";
 import { SortOptions } from "./lib/types.js";
 
 export class CLI {

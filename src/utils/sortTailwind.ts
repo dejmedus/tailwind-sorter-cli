@@ -1,7 +1,7 @@
 import {
+  colonRegex,
   createApplyRegex,
   createRegex,
-  colonRegex,
   dynamicSyntaxMarkers,
 } from "../lib/regex.js";
 

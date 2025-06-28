@@ -1,10 +1,10 @@
-import loadConfig from "./config.js";
 import {
   defaultCategories,
   defaultSortOrder,
   defaultPseudoSortOrder,
   defaultCustomPrefixes,
 } from "../lib/defaultConfig.js";
+import loadConfig from "./config.js";
 import logger from "./logger.js";
 
 /**

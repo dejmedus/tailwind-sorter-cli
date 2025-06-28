@@ -1,6 +1,6 @@
 import loadConfig from "./config.js";
-import { defaultExclude } from "../lib/defaultConfig.js";
 import logger from "./logger.js";
+import { defaultExclude } from "../lib/defaultConfig.js";
 import { SortOptions } from "../lib/types.js";
 
 /**
