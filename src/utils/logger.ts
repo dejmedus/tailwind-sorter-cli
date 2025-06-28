@@ -34,5 +34,9 @@ function errorBox(message: string) {
   console.error(border);
 }
 
+/**
+ * Error and logs helper.
+ * When debug mode is enabled, `log()` prints messages and `error()` prints full error output.
+ */
 const logger = new Logger();
 export default logger;

@@ -8,10 +8,10 @@ import {
 import logger from "./logger.js";
 
 /**
- * Retrieves the classes map and pseudo class sort order from the workspace configuration.
+ * Retrieves the classes map, pseudo class sort order, and custom prefixes from config.
  * If the configuration is invalid or missing, default values are used.
  *
- * @returns An object containing the classes map and pseudo class sort order.
+ * @returns An object containing the classes map, pseudo class sort order, and custom prefixes.
  */
 export default async function getClassesMap() {
   const config = await loadConfig();

@@ -1,9 +1,5 @@
 import loadConfig from "./config.js";
-import {
-  defaultInclude,
-  defaultExclude,
-  defaultCustomPrefixes,
-} from "../lib/defaultConfig.js";
+import { defaultExclude } from "../lib/defaultConfig.js";
 import logger from "./logger.js";
 import { SortOptions } from "../lib/types.js";
 
@@ -15,28 +11,21 @@ import { SortOptions } from "../lib/types.js";
  */
 export default async function getOptions(options: SortOptions) {
   const config = await loadConfig();
-  const { log, error } = logger;
+  const { error } = logger;
 
   let include = options.include || config?.include;
-
   if (typeof include === "string") {
     include = [include];
   }
-
   if (!include || include.length === 0) {
     error(" Include path is required. Use -i or --include to specify it.");
   }
 
-  let exclude = options.exclude || config?.exclude;
-
+  let exclude = options.exclude || config?.exclude || [];
   if (typeof exclude === "string") {
     exclude = [exclude];
   }
-
-  if (!exclude || exclude.length === 0) {
-    exclude = defaultExclude;
-    log("No exclude patterns found in config. Using default exclude patterns.");
-  }
+  exclude = [...exclude, ...defaultExclude];
 
   return { include, exclude };
 }
