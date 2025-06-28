@@ -1,4 +1,5 @@
 import * as assert from "assert";
+
 import { createApplyRegex } from "../lib/regex.js";
 
 function findMatch(fullString: string) {

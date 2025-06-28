@@ -1,7 +1,4 @@
 import * as assert from "assert";
-// import { restore } from "sinon";
-
-// import createConfigStub from "./_createConfigStub";
 
 import sortTailwind from "../utils/sortTailwind.js";
 import { defaultClassesMap } from "./_defaultClassMap.js";
@@ -9,12 +6,12 @@ import { defaultClassesMap } from "./_defaultClassMap.js";
 describe("Ignore sorting", () => {
   const { classesMap, pseudoSortOrder, customPrefixes } = defaultClassesMap();
 
-  function sort(unsortedString: string) {
+  function sort(unsortedString: string, prefixes?: string[]) {
     return sortTailwind(
       unsortedString,
       classesMap,
       pseudoSortOrder,
-      customPrefixes
+      prefixes || customPrefixes
     );
   }
 
@@ -63,25 +60,21 @@ describe("Ignore sorting", () => {
     assert.strictEqual(sort(unsortedString), unsortedString);
   });
 
-  // it("Dynamic erb helper tag: do not change", () => {
-  //   createConfigStub({ customPrefixes: ["class:"] });
+  it("Dynamic erb helper tag: do not change", () => {
+    const customPrefixes = ["class:"];
 
-  //   const unsortedString = `<%= link_to "Home", root_path, class: "nav-link #{'text-pink-500 bg-white' if current_page?(root_path)}" %>`;
+    const unsortedString = `<%= link_to "Home", root_path, class: "nav-link #{'text-pink-500 bg-white' if current_page?(root_path)}" %>`;
 
-  //    assert.strictEqual(sort(unsortedString), unsortedString);
+    assert.strictEqual(sort(unsortedString, customPrefixes), unsortedString);
+  });
 
-  //   restore();
-  // });
+  it("Dynamic erb helper tag array: do not change", () => {
+    const customPrefixes = ["class:"];
 
-  // it("Dynamic erb helper tag array: do not change", () => {
-  //   createConfigStub({ customPrefixes: ["class:"] });
+    const unsortedString = `<%= link_to "Dashboard", dashboard_path, class: ["text-pink-500 bg-white", current_user.admin? ? "bg-red-500 text-white" : "bg-blue-500 text-white"] %>`;
 
-  //   const unsortedString = `<%= link_to "Dashboard", dashboard_path, class: ["text-pink-500 bg-white", current_user.admin? ? "bg-red-500 text-white" : "bg-blue-500 text-white"] %>`;
-
-  //    assert.strictEqual(sort(unsortedString), unsortedString);
-
-  //   restore();
-  // });
+    assert.strictEqual(sort(unsortedString, customPrefixes), unsortedString);
+  });
 
   it("Conditional Angular syntax: do not change", () => {
     const unsortedString = `<div [class.text-white]="isPrimary" [class.bg-blue-500]="isPrimary"`;

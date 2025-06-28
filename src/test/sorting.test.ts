@@ -1,5 +1,4 @@
 import * as assert from "assert";
-// import { restore } from "sinon";
 
 import sortTailwind from "../utils/sortTailwind.js";
 import { defaultClassesMap } from "./_defaultClassMap.js";
@@ -7,12 +6,12 @@ import { defaultClassesMap } from "./_defaultClassMap.js";
 describe("Sorting", () => {
   const { classesMap, pseudoSortOrder, customPrefixes } = defaultClassesMap();
 
-  function sort(unsortedString: string) {
+  function sort(unsortedString: string, prefixes?: string[]) {
     return sortTailwind(
       unsortedString,
       classesMap,
       pseudoSortOrder,
-      customPrefixes
+      prefixes || customPrefixes
     );
   }
 
@@ -373,61 +372,52 @@ describe("Sorting", () => {
 
     assert.strictEqual(sort(unsortedString), sortedString);
   });
+  describe("Rails-specific syntax with customPrefixes", () => {
+    it("Rails erb helper tag", () => {
+      const customPrefixes = ["class:"];
 
-  // it("Rails erb helper tag", () => {
-  //   createConfigStub({ customPrefixes: ["class:"] });
+      const sortedString = `<%= f.label :name, class: "bg-blue-400 bg-blue-500 text-white" %>`;
+      const unsortedString = `<%= f.label :name, class: "bg-blue-500 text-white bg-blue-400" %>`;
 
-  //   const sortedString = `<%= f.label :name, class: "bg-blue-400 bg-blue-500 text-white" %>`;
-  //   const unsortedString = `<%= f.label :name, class: "bg-blue-500 text-white bg-blue-400" %>`;
+      assert.strictEqual(sort(unsortedString, customPrefixes), sortedString);
+    });
 
-  //   assert.strictEqual(sort(unsortedString), sortedString);
+    it("Rails erb helper tag with ()", () => {
+      const customPrefixes = ["class:"];
 
-  //   restore();
-  // });
+      const sortedString = `<%= form_with(model: @user, class: 'bg-pink-500 text-white') do |f| %>`;
+      const unsortedString = `<%= form_with(model: @user, class: 'text-white bg-pink-500') do |f| %>`;
 
-  // it("Rails erb helper tag with ()", () => {
-  //   createConfigStub({ customPrefixes: ["class:"] });
+      assert.strictEqual(sort(unsortedString, customPrefixes), sortedString);
+    });
 
-  //   const sortedString = `<%= form_with(model: @user, class: 'bg-pink-500 text-white') do |f| %>`;
-  //   const unsortedString = `<%= form_with(model: @user, class: 'text-white bg-pink-500') do |f| %>`;
+    it("Rails rb view component", () => {
+      const customPrefixes = ["class:"];
 
-  //   assert.strictEqual(sort(unsortedString), sortedString);
+      const sortedString = `form_with model: @user, class: 'bg-pink-500 text-white' do |f|`;
+      const unsortedString = `form_with model: @user, class: 'text-white bg-pink-500' do |f|`;
 
-  //   restore();
-  // });
+      assert.strictEqual(sort(unsortedString, customPrefixes), sortedString);
+    });
 
-  // it("Rails rb view component", () => {
-  //   createConfigStub({ customPrefixes: ["class:"] });
+    it("Rails rb view component with ()", () => {
+      const customPrefixes = ["class:"];
 
-  //   const sortedString = `form_with model: @user, class: 'bg-pink-500 text-white' do |f|`;
-  //   const unsortedString = `form_with model: @user, class: 'text-white bg-pink-500' do |f|`;
+      const sortedString = `form_with(model: @user, class: 'bg-pink-500 text-white') do |f|`;
+      const unsortedString = `form_with(model: @user, class: 'text-white bg-pink-500') do |f|`;
 
-  //   assert.strictEqual(sort(unsortedString), sortedString);
+      assert.strictEqual(sort(unsortedString, customPrefixes), sortedString);
+    });
 
-  //   restore();
-  // });
+    it("Rails rb view component with special syntax", () => {
+      const customPrefixes = ["has_dom_class -> {"];
 
-  // it("Rails rb view component with ()", () => {
-  //   createConfigStub({ customPrefixes: ["class:"] });
+      const sortedString = `has_dom_class -> { 'bg-pink-500 text-white' }`;
+      const unsortedString = `has_dom_class -> { 'text-white bg-pink-500' }`;
 
-  //   const sortedString = `form_with(model: @user, class: 'bg-pink-500 text-white') do |f|`;
-  //   const unsortedString = `form_with(model: @user, class: 'text-white bg-pink-500') do |f|`;
-
-  //   assert.strictEqual(sort(unsortedString), sortedString);
-
-  //   restore();
-  // });
-
-  // it("Rails rb view component with special syntax", () => {
-  //   createConfigStub({ customPrefixes: ["has_dom_class -> {"] });
-
-  //   const sortedString = `has_dom_class -> { 'bg-pink-500 text-white' }`;
-  //   const unsortedString = `has_dom_class -> { 'text-white bg-pink-500' }`;
-
-  //   assert.strictEqual(sort(unsortedString), sortedString);
-
-  //   restore();
-  // });
+      assert.strictEqual(sort(unsortedString, customPrefixes), sortedString);
+    });
+  });
 
   it("Tailwind merge concat strings", () => {
     // https://github.com/dcastil/tailwind-merge
