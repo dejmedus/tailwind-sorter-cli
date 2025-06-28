@@ -1,6 +1,6 @@
 export interface Config {
-  include?: string[];
-  exclude?: string[];
+  include: string[];
+  exclude: string[];
   customPrefixes: string[];
   categoryOrder: {
     sortOrder: string[];
@@ -17,18 +17,15 @@ export const defaultConfig: Config = {
     "**/node_modules/**",
     "**/dist/**",
     "**/build/**",
+    "**/bin/**",
     "**/out/**",
     "**/test/**",
+    "**/tests/**",
+    "**/__tests__/**",
     "**/coverage/**",
-    "**/vendor/**",
     "**/public/**",
     "**/static/**",
-    "**/*.min.**",
-    "**/*.bundle.**",
-    "**/*.map",
-    "**/*.d.ts",
-    "**/*.spec.**",
-    "**/*.test.**",
+    "**/.*",
   ],
   customPrefixes: ["twMerge(", "clsx(", "cva("],
   categoryOrder: {
