@@ -17,8 +17,8 @@ npm install -g tailwind-sorter
 ```bash
 tailwind-sorter
 ```
-- `-v`, `--version`: Show the version of Tailwind Sorter
-- `-h`, `--help`: Show help information for Tailwind Sorter
+- `-v`, `--version`: Show the version 
+- `-h`, `--help`: Show help information
 
 #### `sort` command
 
@@ -53,8 +53,8 @@ tailwind-sorter init
 # sort all .html files
 tailwind-sorter sort -i "**/*.html"
 
-# sort .jsx and .tsx files, excluding tests
-tailwind-sorter sort -i "**/*.jsx" -i "**/*.tsx" -x "**/tests/**"
+# sort .jsx and .tsx files, excluding a folder
+tailwind-sorter sort -i "**/*.jsx" -i "**/*.tsx" -x "**/ignore-me/"
 
 # sort multiple file types with a single glob
 tailwind-sorter sort -i "**/*.{js,jsx,ts,tsx,html}"
