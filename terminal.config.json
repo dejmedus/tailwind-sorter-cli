@@ -1,0 +1,48 @@
+{
+  "open": [
+    {
+      "tab": "zsh",
+      "commands": ["*CLOSE"],
+      "description": "close current tab"
+    },
+    {
+      "tab": "git",
+      "commands": ["git branch"],
+      "description": "open git tab"
+    },
+    {
+      "tab": "run",
+      "commands": ["*echo npm run cli -- <command> [options"]
+    },
+    {
+      "tab": "test",
+      "commands": ["*echo npm run test"],
+      "description": "open test tab"
+    }
+  ],
+  "test": [
+    {
+      "tab": "test",
+      "commands": ["npm run test"],
+      "description": "run tests"
+    }
+  ],
+  "upgrade": [
+    {
+      "tab": "upgrade",
+      "commands": [
+        "code CHANGELOG.md",
+        "code package.json",
+        "code README.md",
+        "npm i",
+        "echo '1. Update CHANGELOG.md. 2. Up version in package.json. 3. Ensure tests pass. 4. npm pack. 5. npm publish.'"
+      ],
+      "description": "before upgrade to do list"
+    },
+    {
+      "tab": "test",
+      "commands": ["npm run test"],
+      "description": "run tests"
+    }
+  ]
+}
