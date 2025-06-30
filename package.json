@@ -20,7 +20,7 @@
   },
   "type": "module",
   "scripts": {
-    "pack": "npm run build && npm pack && tar -tf *.tgz && rm -rf *.tgz",
+    "package": "npm run build && rm -rf *.tgz && npm pack && tar -tf *.tgz",
     "publish": "npm publish",
     "clean": "rm -rf bin",
     "build": "npm run clean && tsc",
