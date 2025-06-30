@@ -19,12 +19,11 @@ export default async function loadConfig(): Promise<Config | null> {
   try {
     const result = await explorer.search();
     if (result && result.config) {
-      const relativePath = path.relative(process.cwd(), result.filepath ?? "");
-      log(
-        `Tailwind Sorter: Configuration loaded from ./${
-          relativePath || "default location"
-        }`
-      );
+      const formattedPath = result.filepath
+        ? `./${path.relative(process.cwd(), result.filepath)}`
+        : "default configuration";
+
+      log(`Tailwind Sorter: Configuration loaded from ${formattedPath}`);
       return result.config;
     }
     log(
