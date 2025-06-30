@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "bin": {
-    "tailwind-sorter": "./bin/index.js"
+    "tailwind-sorter": "bin/index.js"
   },
   "files": [
     "bin",
@@ -13,7 +13,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/dejmedus/tailwind-sorter-cli"
+    "url": "git+https://github.com/dejmedus/tailwind-sorter-cli.git"
   },
   "bugs": {
     "url": "https://github.com/dejmedus/tailwind-sorter-cli/issues"
