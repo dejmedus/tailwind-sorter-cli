@@ -36,7 +36,7 @@ tailwind-sorter sort [options]
 
 #### `init` command
 
-Creates a `tailwindsorterrc.json` file which allows [sorting rules](#configuration) to be customized.
+Creates a `.tailwindsorterrc.json` file which allows [sorting rules](#configuration) to be customized.
 
 ```bash
 tailwind-sorter init [options]
@@ -78,8 +78,8 @@ Single line `@apply` rules ending with a semicolon that do not include dynamic s
 
 ### Configuration
 
-- If a `tailwindsorterrc.json` file exists and includes a valid sort order, that sort order will be used instead of the default.
-- The `sort` command will default to the `include`, `exclude` patterns found in the `tailwindsorterrc.json` file if not specified in the command line. 
+- If a `.tailwindsorterrc.json` file exists and includes a valid sort order, that sort order will be used instead of the default.
+- The `sort` command will default to the `include`, `exclude` patterns found in the `.tailwindsorterrc.json` file if not specified in the command line. 
 
 **The default category order is**: box model, grid, flex box, background, margins and padding, borders, width and height, typography, transformations, and other.
 
