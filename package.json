@@ -1,7 +1,7 @@
 {
   "name": "tailwind-sorter",
   "description": "Sort your tailwind classes in a predictable way",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "bin": {
     "tailwind-sorter": "bin/index.js"
