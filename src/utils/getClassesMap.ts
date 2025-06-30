@@ -23,8 +23,8 @@ export default async function getClassesMap() {
       : defaultCategories;
 
   if (
-    !config?.categories ||
-    Object.keys(config.categories || {}).length === 0
+    config &&
+    (!config?.categories || Object.keys(config.categories || {}).length === 0)
   ) {
     log(
       "Tailwind Sorter: No categories found in config. Using default categories."
@@ -38,9 +38,10 @@ export default async function getClassesMap() {
       : defaultSortOrder;
 
   if (
-    !config?.categoryOrder ||
-    !config.categoryOrder.sortOrder ||
-    config.categoryOrder.sortOrder.length === 0
+    config &&
+    (!config?.categoryOrder ||
+      !config.categoryOrder.sortOrder ||
+      config.categoryOrder.sortOrder.length === 0)
   ) {
     log(
       "Tailwind Sorter: No category order found in config. Using default category order."
@@ -54,9 +55,10 @@ export default async function getClassesMap() {
       : defaultPseudoSortOrder;
 
   if (
-    !config?.pseudoClassesOrder ||
-    !config.pseudoClassesOrder.sortOrder ||
-    config.pseudoClassesOrder.sortOrder.length === 0
+    config &&
+    (!config?.pseudoClassesOrder ||
+      !config.pseudoClassesOrder.sortOrder ||
+      config.pseudoClassesOrder.sortOrder.length === 0)
   ) {
     log(
       "Tailwind Sorter: No pseudo class order found in config. Using default pseudo class order."
@@ -68,7 +70,10 @@ export default async function getClassesMap() {
       ? config.customPrefixes
       : defaultCustomPrefixes;
 
-  if (!config?.customPrefixes || config.customPrefixes.length === 0) {
+  if (
+    config &&
+    (!config?.customPrefixes || config.customPrefixes.length === 0)
+  ) {
     log(
       "Tailwind Sorter: No custom prefixes found in config. Using default custom prefixes."
     );
