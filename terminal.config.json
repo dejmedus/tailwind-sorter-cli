@@ -12,7 +12,10 @@
     },
     {
       "tab": "run",
-      "commands": ["*echo npm run cli -- <command> [options"]
+      "commands": [
+        "npm run package",
+        "*echo npm install -g ./tailwind-sorter-<v>.tgz"
+      ]
     },
     {
       "tab": "test",
