@@ -10,6 +10,8 @@ A tool to sort Tailwind classes from the command line, based of the [VSCode exte
 
 ```bash
 npm install -g tailwind-sorter
+# or
+npx tailwind-sorter
 ```
 
 ### Usage
