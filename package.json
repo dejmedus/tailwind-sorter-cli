@@ -21,7 +21,6 @@
   "type": "module",
   "scripts": {
     "package": "npm run build && rm -rf *.tgz && npm pack && tar -tf *.tgz",
-    "publish": "npm publish",
     "clean": "rm -rf bin",
     "build": "npm run clean && tsc",
     "cli": "npm run build && node ./bin/index.js",
