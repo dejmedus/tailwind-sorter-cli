@@ -1,3 +1,4 @@
+import path from "path";
 import { cosmiconfig } from "cosmiconfig";
 
 import logger from "./logger.js";
@@ -18,9 +19,10 @@ export default async function loadConfig(): Promise<Config | null> {
   try {
     const result = await explorer.search();
     if (result && result.config) {
+      const relativePath = path.relative(process.cwd(), result.filepath ?? "");
       log(
-        `Tailwind Sorter: Configuration loaded from ${
-          result.filepath || "default location"
+        `Tailwind Sorter: Configuration loaded from ./${
+          relativePath || "default location"
         }`
       );
       return result.config;
