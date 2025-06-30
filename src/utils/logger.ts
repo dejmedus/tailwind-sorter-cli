@@ -3,6 +3,7 @@ class Logger {
 
   constructor() {
     this.log = this.log.bind(this);
+    this.warning = this.warning.bind(this);
     this.error = this.error.bind(this);
   }
 
@@ -14,21 +15,27 @@ class Logger {
     this.debug && console.log(`\x1b[90m${message}\x1b[0m`);
   }
 
+  warning(message: string) {
+    this.debug
+      ? console.log(`\x1b[33mWarning: ${message}\x1b[0m`)
+      : outputBox(message, "warning");
+  }
+
   error(message: string) {
     this.debug
       ? console.error(`\x1b[31mError: ${message}\x1b[0m`)
-      : errorBox(message);
+      : outputBox(message);
 
     process.exit(1);
   }
 }
 
-function errorBox(message: string) {
-  const red = "\x1b[31m";
+function outputBox(message: string, type: "warning" | "error" = "error") {
+  const color = type === "warning" ? "\x1b[33m" : "\x1b[31m";
   const reset = "\x1b[0m";
 
   const border =
-    `${red}┌${"─".repeat(message.length + 2)}┐\n` +
+    `${color}┌${"─".repeat(message.length + 2)}┐\n` +
     `│ ${message} │\n` +
     `└${"─".repeat(message.length + 2)}┘${reset}`;
   console.error(border);

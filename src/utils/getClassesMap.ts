@@ -15,7 +15,7 @@ import logger from "./logger.js";
  */
 export default async function getClassesMap() {
   const config = await loadConfig();
-  const { log, error } = logger;
+  const { log, warning } = logger;
 
   let categories: { [category: string]: string[] } =
     config?.categories && Object.keys(config.categories).length > 0
@@ -82,7 +82,7 @@ export default async function getClassesMap() {
     categoriesArr.length === sortOrder.length && invalidCategories.length === 0;
 
   if (!validConfig) {
-    error(
+    warning(
       `Tailwind Sorter: Invalid configuration. ${
         invalidCategories.length
           ? `Categories not found: ${invalidCategories.join(", ")}`

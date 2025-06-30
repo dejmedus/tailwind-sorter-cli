@@ -19,7 +19,7 @@ program
 program
   .command("init")
   .option("-d, --debug", "Enable debug mode")
-  .description("Create a default Tailwind Sorter config file")
+  .description("Create a default config file")
   .action(async (options) => {
     const cli = new CLI(options);
     await cli.init();
