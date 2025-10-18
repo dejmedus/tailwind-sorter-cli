@@ -1,8 +1,9 @@
 import {
-  colonRegex,
   createApplyRegex,
   createRegex,
+  colonRegex,
   dynamicSyntaxMarkers,
+  parenthesis,
 } from "../lib/regex.js";
 
 /**
@@ -63,8 +64,8 @@ function sortFoundTailwind(
     return match;
   }
 
-  const groupContainsDynamicSyntax = dynamicSyntaxMarkers.some((syntax) =>
-    classesStr.includes(syntax)
+  const groupContainsDynamicSyntax = dynamicSyntaxMarkers.some(
+    (syntax) => classesStr.includes(syntax) || parenthesis.test(classesStr)
   );
 
   if (groupContainsDynamicSyntax) {
@@ -161,10 +162,24 @@ export function findLongestMatch(
 
   let longestMatch = "";
   for (const key in sortConfig) {
+    if (baseClass === key) {
+      return key;
+    }
+
+    // escape chars that could mess with regex
+    const escapedKey = key.replace(/[-[\]\\]/g, "\\$&");
+
+    // can match keys:
+    // starting with `-`, or `!`,
+    // ending with `-` or `/`
+    // ex: invert matches -invert/ but not -inverted/
+    // w lookahead https://regex101.com/r/io1gzM/5
+    // without https://regex101.com/r/DEWLfo/2
+    const lookahead = key.endsWith("-") ? "" : "(?=[-/]|$)";
+    const validSection = new RegExp(`(?<=^|[-!])${escapedKey}${lookahead}`);
+
     const keyInStyleClass =
-      baseClass.startsWith(key) ||
-      baseClass.includes("-" + key) ||
-      baseClass.includes("!" + key) ||
+      validSection.test(baseClass) ||
       // allow _ prefix for ignored classes
       baseClass.startsWith("_" + key);
 

@@ -64,6 +64,23 @@ describe("Correct Regex", () => {
       `bg-blue-400 text-white bg-blue-500`
     );
   });
+
+  it("Arbitrary Variables", () => {
+    checkEquals(
+      `<div class="mt-[calc(theme(spacing.4)+10px)]"></div>`,
+      `mt-[calc(theme(spacing.4)+10px)]`
+    );
+
+    checkEquals(
+      `<div class="clip-path-[polygon(0%_0%,100%_0%,100%_100%,0%_100%)]"></div>`,
+      `clip-path-[polygon(0%_0%,100%_0%,100%_100%,0%_100%)]`
+    );
+
+    checkEquals(
+      `<div class="blur-[calc(1rem+2px)]"></div>`,
+      `blur-[calc(1rem+2px)]`
+    );
+  });
 });
 
 describe("Custom Prefixes", () => {
@@ -95,7 +112,7 @@ describe("Custom Prefixes", () => {
   it(`Multiline brackets twMerge(`, () => {
     checkEquals(
       `className={twMerge(
-        "relative h-full font-sans antialiased",
+        "relative h-full font-sans antialiased", 
         inter.className
         )}>`,
       "relative h-full font-sans antialiased"
@@ -106,6 +123,34 @@ describe("Custom Prefixes", () => {
     checkEquals(
       "twMerge(`lg:grid-cols-[1fr,auto] grid-cols-2`)",
       "lg:grid-cols-[1fr,auto] grid-cols-2"
+    );
+  });
+
+  it(`cn(`, () => {
+    checkEquals(
+      `  <table
+    ref={ref}
+    className={cn("w-full caption-bottom text-sm", className)}
+    {...props}
+  />;`,
+      "w-full caption-bottom text-sm"
+    );
+  });
+
+  it(`Single class cn(`, () => {
+    checkEquals(
+      `className={cn("[&_tr]:border-b", className)} `,
+      "[&_tr]:border-b"
+    );
+  });
+
+  it(`Newline cn(`, () => {
+    checkEquals(
+      `   className={cn(
+      "border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted",
+      className
+    )}`,
+      "border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
     );
   });
 
@@ -178,6 +223,16 @@ describe("Non-Default Custom Prefixes", () => {
     );
   });
 
+  it("Ruby class in parenthesis", () => {
+    const customPrefixes = ["class:"];
+
+    checkEquals(
+      `tag.svg(class: "size-full -rotate-90"`,
+      "size-full -rotate-90",
+      customPrefixes
+    );
+  });
+
   it("Rails rb view component helper tags", () => {
     const customPrefixes = ["class:"];
 
@@ -230,6 +285,13 @@ describe("No Match", () => {
     hasMatch('<div class="<?= $themeClass ?> p-6 rounded-lg">', false);
   });
 
+  it(`Ignore dynamic Razor @( `, () => {
+    hasMatch(
+      `<div class="p-4 @(isActive ? 'bg-green-200' : 'bg-gray-200')">`,
+      false
+    );
+  });
+
   it("Ignore dynamic Svelte", () => {
     hasMatch("<div class:isActive={isActive}>", false);
   });
@@ -270,5 +332,14 @@ describe("No Match", () => {
     );
     hasMatch("<div class:red=move || count() % 2 == 1 ></div>", false);
     hasMatch("<div class=style::jumbotron/>", false);
+  });
+
+  it(`Ignore cn function`, () => {
+    hasMatch(
+      `export function cn(...inputs: ClassValue[]): string {
+  return twMerge(clsx(inputs));
+}`,
+      false
+    );
   });
 });
