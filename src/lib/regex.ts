@@ -13,11 +13,11 @@ export function createRegex(customPrefixes: string[]) {
 
   const prefixes = `(${escapedPrefixes}|class=|className=)`;
 
-  // regex101 example: https://regex101.com/r/IfViQ8/4
-  // (?<=\\s|{|^) prefix should be preceded by a space, bracket, or the start of the string
+  // regex101 example: https://regex101.com/r/IfViQ8/5
+  // (?<=\\s|{|}|^) prefix should be preceded by a space, bracket, or the start of the string
   // \\s* may have spaces/newlines after the prefix
   // "([^"?<{]*)" matches everything inside quotes group unless there is dynamic syntax inside
-  const regexStr = `(?<=\\s|{|^)${prefixes}\\s*("([^"?<{]*)"|'([^'?<{]*)'|\`([^\`?<{]*)\`)`;
+  const regexStr = `(?<=\\s|{|}|^|\\()${prefixes}\\s*("([^"?<{]*)"|'([^'?<{]*)'|\`([^\`?<{]*)\`)`;
 
   return new RegExp(regexStr, "g");
 }
@@ -47,6 +47,17 @@ export function createApplyRegex() {
  */
 export const colonRegex = /:(?![^\[\]]*\])/g;
 
+/**
+ * Finds all parenthesis that are not inside square brackets.
+ * Preserves arbitrary values
+ *
+ * @example
+ * // matches "(" that aren't inside []
+ * // class="@string.Join(" ", classes)"
+ * @see https://regex101.com/r/isai9V/2
+ */
+export const parenthesis = /\((?![^\[\]]*\])/g;
+
 export const dynamicSyntaxMarkers = [
   "${",
   "#{",
@@ -56,10 +67,12 @@ export const dynamicSyntaxMarkers = [
   "}}",
   "<%",
   "<%=",
+  "<%-",
   "%>",
   "<?php",
   "<?=",
   "?>",
   "{%",
   "%}",
+  "@(",
 ];
