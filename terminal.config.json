@@ -2,25 +2,30 @@
   "open": [
     {
       "tab": "zsh",
-      "commands": ["*CLOSE"],
+      "commands": ["*close"],
       "description": "close current tab"
     },
     {
       "tab": "git",
       "commands": ["git branch"],
-      "description": "open git tab"
+      "description": "open git tab",
+      "icon": "git",
+      "shell": "bash"
     },
     {
       "tab": "run",
       "commands": [
         "npm run package",
         "*echo npm install -g ./tailwind-sorter-<v>.tgz"
-      ]
+      ],
+      "shell": "bash"
     },
     {
       "tab": "test",
-      "commands": ["*echo npm run test"],
-      "description": "open test tab"
+      "commands": [],
+      "header": "npm run test",
+      "description": "open test tab",
+      "shell": "bash"
     }
   ],
   "test": [
