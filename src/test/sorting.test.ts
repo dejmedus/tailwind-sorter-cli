@@ -29,6 +29,14 @@ describe("Sorting", () => {
     assert.strictEqual(sort(unsortedString), sortedString);
   });
 
+  it("Kitchen sink", () => {
+    const unsortedString = `<div class="text-center after:content-[''] sm:hover:bg-[url('/noise.png')] border-4 -mt-2 hover:focus:rotate-3 lg:dark:bg-gradient-to-tr translate-x-1/2 before:opacity-50 w-[calc(100%-4rem)] flex-col focus-within:ring-4 grid-cols-3 h-screen text-3xl font-black absolute justify-between sm:peer-checked:translate-y-3 hover:skew-x-6 md:max-w-3xl text-blue-500 bg-cover md:grid p-10 bg-center flex bg-no-repeat underline gap-6 sm:w-1/2 sm:bg-yellow-400 bg-[radial-gradient(circle_at_top_left,#1e3a8a,#9333ea)] z-50 sticky rounded-xl hover:contrast-125 hover:shadow-2xl lg:mt-10 lg:pl-8 group-hover:opacity-90 sm:even:translate-x-4 sm:hover:scale-105 text-balance peer-invalid:ring-red-500 overflow-hidden min-h-[50vh] md:py-12 dark:hover:brightness-75 bg-fixed hover:text-white sm:dark:text-green-400 before:absolute sm:translate-x-2 sm:text-lg md:backdrop-blur-xl select-none" blah blah>`;
+
+    const sortedString = `<div class="z-50 absolute before:absolute sticky flex flex-col justify-between gap-6 md:grid grid-cols-3 bg-[radial-gradient(circle_at_top_left,#1e3a8a,#9333ea)] sm:bg-yellow-400 sm:hover:bg-[url('/noise.png')] lg:dark:bg-gradient-to-tr bg-cover bg-no-repeat bg-center bg-fixed before:opacity-50 group-hover:opacity-90 hover:shadow-2xl md:backdrop-blur-xl dark:hover:brightness-75 -mt-2 lg:mt-10 p-10 md:py-12 lg:pl-8 border-4 rounded-xl focus-within:ring-4 peer-invalid:ring-red-500 w-[calc(100%-4rem)] sm:w-1/2 md:max-w-3xl h-screen min-h-[50vh] overflow-hidden font-black text-blue-500 sm:dark:text-green-400 hover:text-white sm:text-lg text-3xl text-center underline text-balance after:content-[''] hover:focus:rotate-3 sm:hover:scale-105 hover:skew-x-6 translate-x-1/2 sm:even:translate-x-4 sm:peer-checked:translate-y-3 sm:translate-x-2 select-none hover:contrast-125" blah blah>`;
+
+    assert.strictEqual(sort(unsortedString), sortedString);
+  });
+
   it("Non tailwind classes with - sort to end", () => {
     const sortedString = `<div className='relative flex justify-center self-center lg:self-start -ml-5 lg:ml-0 w-[375px] lg:w-[568px] h-[375px] lg:h-[568px] custom shape-wrapper'`;
     const unsortedString = `<div className='lg:self-start -ml-5 relative justify-center custom self-center lg:ml-0 shape-wrapper w-[375px] lg:w-[568px] h-[375px] lg:h-[568px] flex'`;
@@ -372,6 +380,7 @@ describe("Sorting", () => {
 
     assert.strictEqual(sort(unsortedString), sortedString);
   });
+
   describe("Rails-specific syntax with customPrefixes", () => {
     it("Rails erb helper tag", () => {
       const customPrefixes = ["class:"];
@@ -396,6 +405,15 @@ describe("Sorting", () => {
 
       const sortedString = `form_with model: @user, class: 'bg-pink-500 text-white' do |f|`;
       const unsortedString = `form_with model: @user, class: 'text-white bg-pink-500' do |f|`;
+
+      assert.strictEqual(sort(unsortedString, customPrefixes), sortedString);
+    });
+
+    it("Ruby class: in parenthesis", () => {
+      const customPrefixes = ["class:"];
+
+      const sortedString = `tag.svg(class: "flex flex-col size-full -rotate-90", viewBox: "0 0 36 36", xmlns: "http://www.w3.org/2000/svg") do`;
+      const unsortedString = `tag.svg(class: "size-full flex-col -rotate-90 flex", viewBox: "0 0 36 36", xmlns: "http://www.w3.org/2000/svg") do`;
 
       assert.strictEqual(sort(unsortedString, customPrefixes), sortedString);
     });

@@ -27,7 +27,7 @@ export const defaultConfig: Config = {
     "**/static/**",
     "**/.*",
   ],
-  customPrefixes: ["twMerge(", "clsx(", "cva("],
+  customPrefixes: ["twMerge(", "clsx(", "cva(", "cn("],
   categoryOrder: {
     sortOrder: [
       "box",

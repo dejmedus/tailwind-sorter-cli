@@ -86,6 +86,8 @@ describe("Find Config Match", () => {
       findLongestMatch("hover:!bg-blue-500", classesMap),
       "bg-"
     );
+
+    assert.strictEqual(findLongestMatch("!-m-4", classesMap), "m-");
   });
 
   it("fractions", () => {
@@ -167,6 +169,14 @@ describe("Find Config Match", () => {
     );
   });
 
+  it("bg- custom style class", () => {
+    assert.strictEqual(findLongestMatch("bg-inverted/25", classesMap), "bg-");
+  });
+
+  it("custom style class that includes tailwind in name", () => {
+    assert.strictEqual(findLongestMatch("inverted", classesMap), "");
+  });
+
   it("arbitrary [] class", () => {
     assert.strictEqual(
       findLongestMatch("before:content-[attr(data:time)]", classesMap),
@@ -192,6 +202,21 @@ describe("Find Config Match", () => {
 
     assert.strictEqual(
       findLongestMatch("[&:nth-child(3)]:bg-blue-500", classesMap),
+      "bg-"
+    );
+
+    assert.strictEqual(
+      findLongestMatch("[&:is(button,a)]:text-blue-500", classesMap),
+      "text-"
+    );
+
+    assert.strictEqual(
+      findLongestMatch("[&_p]:text-gray-500", classesMap),
+      "text-"
+    );
+
+    assert.strictEqual(
+      findLongestMatch("[&:hover]:[&>*]:bg-red-500", classesMap),
       "bg-"
     );
   });
