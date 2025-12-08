@@ -1,5 +1,9 @@
 ## Change Log
 
+## 1.0.3
+
+- Update Dependencies
+
 ## 1.0.2
 
 - Stricter class matching (0.1.50)
