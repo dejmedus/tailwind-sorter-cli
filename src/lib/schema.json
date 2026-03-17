@@ -45,6 +45,15 @@
         "items": { "type": "string" }
       },
       "description": "List of classes in each category"
+    },
+    "sectionOrder": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["classes", "pseudoClasses", "customClasses"]
+      },
+      "default": ["classes", "customClasses"],
+      "description": "Order that classes (text, bg), pseudo classes (hover:, md:), and custom classes (non-Tailwind) will be placed after sorting. Both 'classes' and 'customClasses' are required. Example: [\"classes\", \"pseudoClasses\", \"customClasses\"]"
     }
   },
   "additionalProperties": false

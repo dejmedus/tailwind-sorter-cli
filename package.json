@@ -22,7 +22,7 @@
   "scripts": {
     "package": "npm run build && rm -rf *.tgz && npm pack && tar -tf *.tgz",
     "clean": "rm -rf bin",
-    "build": "npm run clean && tsc",
+    "build": "npm run clean && tsc -p tsconfig.build.json",
     "cli": "npm run build && node ./bin/index.js",
     "test": "NODE_OPTIONS=--loader=ts-node/esm mocha src/test/**/*.test.ts"
   },
@@ -44,7 +44,7 @@
     "@types/mock-fs": "^4.13.4",
     "@types/node": "^24.0.1",
     "@types/sinon": "^17.0.4",
-    "mocha": "^11.7.1",
+    "mocha": "^11.3.0",
     "mock-fs": "^5.5.0",
     "sinon": "^21.0.0",
     "ts-node": "^10.9.2",

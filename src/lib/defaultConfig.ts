@@ -9,6 +9,7 @@ export interface Config {
     sortOrder: string[];
   };
   categories: Record<string, string[]>;
+  sectionOrder: ("classes" | "customClasses" | "pseudoClasses")[];
 }
 
 export const defaultConfig: Config = {
@@ -25,7 +26,7 @@ export const defaultConfig: Config = {
     "**/coverage/**",
     "**/public/**",
     "**/static/**",
-    "**/.*",
+    "**/.*"
   ],
   customPrefixes: ["twMerge(", "clsx(", "cva(", "cn("],
   categoryOrder: {
@@ -39,8 +40,8 @@ export const defaultConfig: Config = {
       "sizing",
       "typography",
       "transformations",
-      "other",
-    ],
+      "other"
+    ]
   },
   pseudoClassesOrder: {
     sortOrder: [
@@ -121,8 +122,8 @@ export const defaultConfig: Config = {
       "contrast-",
       "group-",
       "peer-",
-      "*",
-    ],
+      "*"
+    ]
   },
   categories: {
     box: [
@@ -163,7 +164,7 @@ export const defaultConfig: Config = {
       "absolute",
       "relative",
       "sticky",
-      "inset-",
+      "inset-"
     ],
     grid: [
       "grid",
@@ -195,7 +196,7 @@ export const defaultConfig: Config = {
       "columns-4xl",
       "columns-5xl",
       "columns-6xl",
-      "columns-7xl",
+      "columns-7xl"
     ],
     flex: [
       "flex",
@@ -233,7 +234,7 @@ export const defaultConfig: Config = {
       "gap-",
       "space-x",
       "space-y",
-      "order-",
+      "order-"
     ],
     "bg-visual": [
       "box-decoration-",
@@ -292,7 +293,7 @@ export const defaultConfig: Config = {
       "sepia-",
       "fill-",
       "stroke-",
-      "forced-color-adjust-",
+      "forced-color-adjust-"
     ],
     margins: [
       "m-",
@@ -312,7 +313,7 @@ export const defaultConfig: Config = {
       "pt-",
       "pr-",
       "pb-",
-      "pl-",
+      "pl-"
     ],
     borders: [
       "border",
@@ -357,7 +358,7 @@ export const defaultConfig: Config = {
       "ring",
       "ring-",
       "ring-inset",
-      "ring-offset",
+      "ring-offset"
     ],
     sizing: [
       "w-",
@@ -413,7 +414,7 @@ export const defaultConfig: Config = {
       "overflow-y-",
       "overscroll-",
       "overscroll-x-",
-      "overscroll-y-",
+      "overscroll-y-"
     ],
     typography: [
       "font-",
@@ -504,7 +505,7 @@ export const defaultConfig: Config = {
       "whitespace-",
       "hyphens-none",
       "hyphens-manual",
-      "hyphens-auto",
+      "hyphens-auto"
     ],
     transformations: [
       "transform-",
@@ -535,7 +536,7 @@ export const defaultConfig: Config = {
       "ease-",
       "delay-",
       "ease-linear",
-      "backface-",
+      "backface-"
     ],
     other: [
       "accent-",
@@ -562,9 +563,10 @@ export const defaultConfig: Config = {
       "list-",
       "list-type-",
       "list-position-",
-      "list-image-",
-    ],
+      "list-image-"
+    ]
   },
+  sectionOrder: ["classes", "customClasses"]
 };
 
 export const defaultCategories: { [category: string]: string[] } =
@@ -576,5 +578,6 @@ export const defaultPseudoSortOrder =
   defaultConfig.pseudoClassesOrder.sortOrder;
 
 export const defaultCustomPrefixes = defaultConfig.customPrefixes;
+export const defaultSectionOrder = defaultConfig.sectionOrder;
 export const defaultExclude = defaultConfig.exclude;
 export const defaultInclude = defaultConfig.include;

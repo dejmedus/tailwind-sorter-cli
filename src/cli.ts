@@ -31,13 +31,13 @@ export class CLI {
     exclude && log(`Excluding files matching: ${exclude}`);
 
     const pathOptions: { ignore?: string[]; onlyFiles?: boolean } = {
-      onlyFiles: true,
+      onlyFiles: true
     };
 
     exclude && (pathOptions.ignore = [...exclude]);
 
     const files = await fg(include, pathOptions);
-    const { classesMap, pseudoSortOrder, customPrefixes } =
+    const { classesMap, pseudoSortOrder, sectionOrder, customPrefixes } =
       await getClassesMap();
 
     for (const file of files) {
@@ -46,7 +46,8 @@ export class CLI {
         content,
         classesMap,
         pseudoSortOrder,
-        customPrefixes
+        customPrefixes,
+        sectionOrder
       );
       await fs.writeFile(file, sorted);
       log(`Sorted file: ${file}`);
