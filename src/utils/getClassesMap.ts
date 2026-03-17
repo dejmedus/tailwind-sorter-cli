@@ -3,6 +3,7 @@ import {
   defaultSortOrder,
   defaultPseudoSortOrder,
   defaultCustomPrefixes,
+  defaultSectionOrder
 } from "../lib/defaultConfig.js";
 import loadConfig from "./config.js";
 import logger from "./logger.js";
@@ -86,6 +87,15 @@ export default async function getClassesMap() {
   const validConfig =
     categoriesArr.length === sortOrder.length && invalidCategories.length === 0;
 
+  const sectionOrderConfig = config?.sectionOrder;
+
+  const sectionOrder =
+    sectionOrderConfig &&
+    sectionOrderConfig.includes("classes") &&
+    sectionOrderConfig.includes("customClasses")
+      ? sectionOrderConfig
+      : defaultSectionOrder;
+
   if (!validConfig) {
     warning(
       `Tailwind Sorter: Invalid configuration. ${
@@ -106,5 +116,5 @@ export default async function getClassesMap() {
     });
   });
 
-  return { classesMap, pseudoSortOrder, customPrefixes };
+  return { classesMap, pseudoSortOrder, sectionOrder, customPrefixes };
 }

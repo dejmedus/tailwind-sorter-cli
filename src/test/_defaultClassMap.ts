@@ -4,6 +4,7 @@ import {
   defaultSortOrder,
   defaultPseudoSortOrder,
   defaultCustomPrefixes,
+  defaultSectionOrder
 } from "../lib/defaultConfig.js";
 
 export function defaultClassesMap() {
@@ -20,5 +21,6 @@ export function defaultClassesMap() {
     classesMap,
     pseudoSortOrder: defaultPseudoSortOrder,
     customPrefixes: defaultCustomPrefixes,
+    sectionOrder: defaultSectionOrder
   };
 }

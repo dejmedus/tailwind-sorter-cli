@@ -1,32 +1,20 @@
 import * as assert from "assert";
 
-import sortTailwind from "../utils/sortTailwind.js";
-import { defaultClassesMap } from "./_defaultClassMap.js";
+import sortHelper from "./_sortHelper.js";
 
 describe("Sorting", () => {
-  const { classesMap, pseudoSortOrder, customPrefixes } = defaultClassesMap();
-
-  function sort(unsortedString: string, prefixes?: string[]) {
-    return sortTailwind(
-      unsortedString,
-      classesMap,
-      pseudoSortOrder,
-      prefixes || customPrefixes
-    );
-  }
-
   it('Correct sort class=""', () => {
     const sortedString = `<div class="flex flex-col flex-1 items-center gap-20 bg-black lg:bg-pink hover:bg-purple bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 w-full font-sans font-semibold before:content-[''] after:content-['']" blah blah`;
     const unsortedString = `<div class="font-semibold after:content-[''] flex-1 flex-col gap-20 lg:bg-pink hover:bg-purple bg-gradient-to-r from-green-300 bg-black via-blue-500 to-purple-600 flex w-full font-sans before:content-[''] items-center" blah blah`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Correct sort className=''", () => {
     const sortedString = `<div className='flex flex-col flex-1 items-center gap-20 bg-black lg:bg-pink hover:bg-purple bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 w-full font-sans font-semibold before:content-[""] after:content-[""]' blah blah`;
     const unsortedString = `<div className='font-semibold after:content-[""] flex-1 flex-col gap-20 lg:bg-pink hover:bg-purple bg-gradient-to-r from-green-300 bg-black via-blue-500 to-purple-600 flex w-full font-sans before:content-[""] items-center' blah blah`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Kitchen sink", () => {
@@ -34,84 +22,84 @@ describe("Sorting", () => {
 
     const sortedString = `<div class="z-50 absolute before:absolute sticky flex flex-col justify-between gap-6 md:grid grid-cols-3 bg-[radial-gradient(circle_at_top_left,#1e3a8a,#9333ea)] sm:bg-yellow-400 sm:hover:bg-[url('/noise.png')] lg:dark:bg-gradient-to-tr bg-cover bg-no-repeat bg-center bg-fixed before:opacity-50 group-hover:opacity-90 hover:shadow-2xl md:backdrop-blur-xl dark:hover:brightness-75 -mt-2 lg:mt-10 p-10 md:py-12 lg:pl-8 border-4 rounded-xl focus-within:ring-4 peer-invalid:ring-red-500 w-[calc(100%-4rem)] sm:w-1/2 md:max-w-3xl h-screen min-h-[50vh] overflow-hidden font-black text-blue-500 sm:dark:text-green-400 hover:text-white sm:text-lg text-3xl text-center underline text-balance after:content-[''] hover:focus:rotate-3 sm:hover:scale-105 hover:skew-x-6 translate-x-1/2 sm:even:translate-x-4 sm:peer-checked:translate-y-3 sm:translate-x-2 select-none hover:contrast-125" blah blah>`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Non tailwind classes with - sort to end", () => {
     const sortedString = `<div className='relative flex justify-center self-center lg:self-start -ml-5 lg:ml-0 w-[375px] lg:w-[568px] h-[375px] lg:h-[568px] custom shape-wrapper'`;
     const unsortedString = `<div className='lg:self-start -ml-5 relative justify-center custom self-center lg:ml-0 shape-wrapper w-[375px] lg:w-[568px] h-[375px] lg:h-[568px] flex'`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Non tailwind classes keep their sort order", () => {
     const sortedString = `<div class="flex flex-col flex-1 carrot banana apple" blah blah`;
     const unsortedString = `<div class="flex-col carrot flex-1 banana flex apple" blah blah`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Non tailwind classes w duplicates keep their sort order", () => {
     const sortedString = `<div class="flex flex-col flex-1 banana carrot-1 carrot-1 hover:carrot apple" blah blah`;
     const unsortedString = `<div class="banana carrot-1 flex-col carrot-1 hover:carrot flex-1 apple flex" blah blah`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Non tailwind classes w prefix keep their sort order", () => {
     const sortedString = `<div class="tw:px-4 tw-text-2xl foo bar"><div>`;
     const unsortedString = `<div class="foo bar tw-text-2xl tw:px-4"><div>`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("One word sort", () => {
     const sortedString = `<div className='flex' blah blah`;
     const unsortedString = `<div className='flex' blah blah`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Empty string present", () => {
     const sortedString = `<div className=''></div><div className='flex flex-col' blah blah`;
     const unsortedString = `<div className=''></div><div className='flex-col flex' blah blah`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Multi string types", () => {
     const sortedString = `<div className="flex flex-col"></div><div className='flex flex-col' blah blah`;
     const unsortedString = `<div className="flex-col flex"></div><div className='flex-col flex' blah blah`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Repeat classes", () => {
     const sortedString = `<div className="top-0 left-0 left-0 left-10 lg:static fixed flex justify-center"`;
     const unsortedString = `<div className="top-0 left-10 left-0 lg:static fixed flex justify-center left-0"`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Repeat classes w pseudos", () => {
     const sortedString = `<div className="top-0 hover:lg:left-0 hover:lg:left-0 hover:lg:left-10 lg:static fixed flex justify-center"`;
     const unsortedString = `<div className="top-0 hover:lg:left-10 hover:lg:left-0 lg:static fixed flex justify-center hover:lg:left-0"`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Only pseudo classes", () => {
     const sortedString = `<div class="focus-within:ring focus-within:ring-blue-200 group-hover:text-blue-500" blah blah`;
     const unsortedString = `<div class="focus-within:ring-blue-200 group-hover:text-blue-500 focus-within:ring" blah blah`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("-not pseudo classes", () => {
     const sortedString = `<div class="bg-indigo-600 hover:not-lg:bg-indigo-700 hover:not-xl:bg-indigo-700 hover:not-focus:bg-indigo-700"`;
     const unsortedString = `<div class="hover:not-xl:bg-indigo-700 bg-indigo-600 hover:not-focus:bg-indigo-700 hover:not-lg:bg-indigo-700"`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   // https://tailwindcss.com/docs/hover-focus-and-other-states#supports
@@ -119,168 +107,168 @@ describe("Sorting", () => {
     const sortedString = `<div class="supports-[display:flex]:flex supports-[display:grid]:grid supports-backdrop-filter:bg-black/25">`;
     const unsortedString = `<div class="supports-backdrop-filter:bg-black/25 supports-[display:flex]:flex supports-[display:grid]:grid">`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Complex arbitrary []", () => {
     const sortedString = `<div class="[&:nth-child(3)]:bg-blue-500 [&>*:not(:first-child)]:mt-2">`;
     const unsortedString = `<div class="[&>*:not(:first-child)]:mt-2 [&:nth-child(3)]:bg-blue-500">`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("-not variants with pseudo classes", () => {
     const sortedString = `<div class="4xl:not-disabled:bg-pink-400 5xl:not-disabled:bg-blue-500 max-6xl:not-disabled:bg-green-500">`;
     const unsortedString = `<div class="max-6xl:not-disabled:bg-green-500 5xl:not-disabled:bg-blue-500 4xl:not-disabled:bg-pink-400">`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Screen size pseudo classes", () => {
     const sortedString = `<div class="sm:hover:bg-blue-500 md:visited:bg-red-600 md:group-hover:bg-red-500 lg:focus-within:bg-green-500">`;
     const unsortedString = `<div class="md:visited:bg-red-600 lg:focus-within:bg-green-500 sm:hover:bg-blue-500 md:group-hover:bg-red-500">`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("group-", () => {
     const sortedString = `<div class="hover:bg-pink-500 focus-within:bg-green-500 group-hover:bg-blue-500"`;
     const unsortedString = `<div class="group-hover:bg-blue-500 focus-within:bg-green-500 hover:bg-pink-500"`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Group and peer variants", () => {
     const sortedString = `<div class="2xl:hover:bg-blue-400 hover:bg-blue-500 group-hover:bg-pink-500 peer-hover:bg-yellow-500">`;
     const unsortedString = `<div class="peer-hover:bg-yellow-500 2xl:hover:bg-blue-400 group-hover:bg-pink-500 hover:bg-blue-500">`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Group/ and group-hover/", () => {
     const sortedString = `<a class="group/edit invisible group-hover/item:visible" href="tel:{person.phone}">`;
     const unsortedString = `<a class="group-hover/item:visible invisible group/edit" href="tel:{person.phone}">`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Data and aria attributes", () => {
     const sortedString = `<div class="data-[open=true]:bg-blue-500 aria-[expanded=true]:bg-green-500 hover:bg-red-500">`;
     const unsortedString = `<div class="hover:bg-red-500 aria-[expanded=true]:bg-green-500 data-[open=true]:bg-blue-500">`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Chained container queries", () => {
     const sortedString = `<div class="flex @sm:@max-md:flex-col @sm:@max-lg:flex-col"`;
     const unsortedString = `<div class="@sm:@max-lg:flex-col @sm:@max-md:flex-col flex"`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Container queries", () => {
     const sortedString = `<div class="flex @sm:flex @md:flex @lg:flex text-black group-hover:text-blue-500"`;
     const unsortedString = `<div class="@lg:flex group-hover:text-blue-500 flex @md:flex @sm:flex text-black"`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("@container w arbitrary values", () => {
     const sortedString = `<div class="@container max-[600px]:bg-sky-300 min-[320px]:text-center">`;
     const unsortedString = `<div class="min-[320px]:text-center max-[600px]:bg-sky-300 @container">`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Arbitrary values", () => {
     const sortedString = `<div className='bg-[#1a1a1a] w-[100px] h-[calc(100%-1rem)]' blah blah`;
     const unsortedString = `<div className='h-[calc(100%-1rem)] w-[100px] bg-[#1a1a1a]' blah blah`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Arbitrary values with dynamic content", () => {
     const sortedString = `<div class="content-['Time:_12:30_PM'] before:content-[attr(data:time)]">`;
     const unsortedString = `<div class="before:content-[attr(data:time)] content-['Time:_12:30_PM']">`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Special characters in arbitrary []", () => {
     const sortedString = `<div class="grid-cols-[minmax(0,_1fr)_50px] w-[calc(100%-theme('spacing.2'))]">`;
     const unsortedString = `<div class="w-[calc(100%-theme('spacing.2'))] grid-cols-[minmax(0,_1fr)_50px]">`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Multiple negative values", () => {
     const sortedString = `<div class="-inset-x-4 -m-2 -skew-y-3 -translate-y-full">`;
     const unsortedString = `<div class="-skew-y-3 -translate-y-full -m-2 -inset-x-4">`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Fractional values", () => {
     const sortedString = `<div class="gap-x-1/2 grid grid-cols-[1fr,2fr] w-2/3 translate-x-1/2">`;
     const unsortedString = `<div class="translate-x-1/2 w-2/3 gap-x-1/2 grid-cols-[1fr,2fr] grid">`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Dot in class", () => {
     const sortedString = `class="bg-[url('image.jpg')] text-black"`;
     const unsortedString = `class="text-black bg-[url('image.jpg')]"`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Negative margins", () => {
     const sortedString = `<div className='z-10 -mt-5 -mb-5' blah blah`;
     const unsortedString = `<div className='-mb-5 z-10 -mt-5' blah blah`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Style vars", () => {
     const sortedString = `<div class="bg-[var(--my-color)] text-black"></div>`;
     const unsortedString = `<div class="text-black bg-[var(--my-color)]"></div>`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Custom boolean data attributes", () => {
     const sortedString = `<div data-current class="bg-black opacity-75 data-current:opacity-100">`;
     const unsortedString = `<div data-current class="data-current:opacity-100 bg-black opacity-75">`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("not variant", () => {
     const sortedString = `<div class="bg-black hover:opacity-100 not-hover:opacity-75">`;
     const unsortedString = `<div class="not-hover:opacity-75 hover:opacity-100 bg-black">`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("not variant w prefix", () => {
     const sortedString = `<div class="tw:bg-black tw-hover:opacity-100 tw-not-hover:opacity-75 banana apple">`;
     const unsortedString = `<div class="banana tw-not-hover:opacity-75 apple tw-hover:opacity-100 tw:bg-black">`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("sizes", () => {
     const sortedString = `<div class="w-1/12 w-xs w-md hover:w-md w-2xl">`;
     const unsortedString = `<div class="w-md w-xs w-2xl w-1/12 hover:w-md">`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Angular syntax", () => {
     const sortedString = `<div class="bg-blue-500 text-white"`;
     const unsortedString = `<div class="text-white bg-blue-500"`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Elixir syntax", () => {
@@ -307,35 +295,35 @@ describe("Sorting", () => {
     end
     `;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Phoenix syntax", () => {
     const sortedString = `<span class="bg-blue-500 text-white" id="counter"><%= @counter %></span>`;
     const unsortedString = `<span class="text-white bg-blue-500" id="counter"><%= @counter %></span>`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Leptos syntax", () => {
     const sortedString = `<button class="flex flex-row" on:click=on_click>"Welcome to Leptos!"</button>`;
     const unsortedString = `<button class="flex-row flex" on:click=on_click>"Welcome to Leptos!"</button>`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Yew syntax", () => {
     const sortedString = `<button class="bg-blue-500 text-white" onclick={ctx.link().callback(|_| Msg::Random)}>{ "Random" }</button>`;
     const unsortedString = `<button class="text-white bg-blue-500" onclick={ctx.link().callback(|_| Msg::Random)}>{ "Random" }</button>`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("PHP syntax", () => {
     const sortedString = `<button class="bg-blue-500 text-white" onclick="<?php echo $link; ?>"><?php echo $label; ?></button>`;
     const unsortedString = `<button class="text-white bg-blue-500" onclick="<?php echo $link; ?>"><?php echo $label; ?></button>`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("PHP Laravel syntax", () => {
@@ -346,7 +334,7 @@ describe("Sorting", () => {
         Increment Count
     </button>`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("PHP Symfony Twig syntax", () => {
@@ -357,7 +345,7 @@ describe("Sorting", () => {
        <a href="{{ path('homepage') }}" class="px-4 block">Home</a>
     {% endblock %}`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("PHP Blade syntax", () => {
@@ -371,14 +359,14 @@ describe("Sorting", () => {
           <x-alert type="success" message="This is a success alert!" class="text-white bg-blue-500" />
       @endsection`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Svelte syntax", () => {
     const sortedString = `<div class:isActive={isActive && !isDisabled} class="bg-blue-400 bg-blue-500 text-white">`;
     const unsortedString = `<div class:isActive={isActive && !isDisabled} class="bg-blue-400 text-white bg-blue-500">`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   describe("Rails-specific syntax with customPrefixes", () => {
@@ -388,7 +376,10 @@ describe("Sorting", () => {
       const sortedString = `<%= f.label :name, class: "bg-blue-400 bg-blue-500 text-white" %>`;
       const unsortedString = `<%= f.label :name, class: "bg-blue-500 text-white bg-blue-400" %>`;
 
-      assert.strictEqual(sort(unsortedString, customPrefixes), sortedString);
+      assert.strictEqual(
+        sortHelper(unsortedString, customPrefixes),
+        sortedString
+      );
     });
 
     it("Rails erb helper tag with ()", () => {
@@ -397,7 +388,10 @@ describe("Sorting", () => {
       const sortedString = `<%= form_with(model: @user, class: 'bg-pink-500 text-white') do |f| %>`;
       const unsortedString = `<%= form_with(model: @user, class: 'text-white bg-pink-500') do |f| %>`;
 
-      assert.strictEqual(sort(unsortedString, customPrefixes), sortedString);
+      assert.strictEqual(
+        sortHelper(unsortedString, customPrefixes),
+        sortedString
+      );
     });
 
     it("Rails rb view component", () => {
@@ -406,7 +400,10 @@ describe("Sorting", () => {
       const sortedString = `form_with model: @user, class: 'bg-pink-500 text-white' do |f|`;
       const unsortedString = `form_with model: @user, class: 'text-white bg-pink-500' do |f|`;
 
-      assert.strictEqual(sort(unsortedString, customPrefixes), sortedString);
+      assert.strictEqual(
+        sortHelper(unsortedString, customPrefixes),
+        sortedString
+      );
     });
 
     it("Ruby class: in parenthesis", () => {
@@ -415,7 +412,10 @@ describe("Sorting", () => {
       const sortedString = `tag.svg(class: "flex flex-col size-full -rotate-90", viewBox: "0 0 36 36", xmlns: "http://www.w3.org/2000/svg") do`;
       const unsortedString = `tag.svg(class: "size-full flex-col -rotate-90 flex", viewBox: "0 0 36 36", xmlns: "http://www.w3.org/2000/svg") do`;
 
-      assert.strictEqual(sort(unsortedString, customPrefixes), sortedString);
+      assert.strictEqual(
+        sortHelper(unsortedString, customPrefixes),
+        sortedString
+      );
     });
 
     it("Rails rb view component with ()", () => {
@@ -424,7 +424,10 @@ describe("Sorting", () => {
       const sortedString = `form_with(model: @user, class: 'bg-pink-500 text-white') do |f|`;
       const unsortedString = `form_with(model: @user, class: 'text-white bg-pink-500') do |f|`;
 
-      assert.strictEqual(sort(unsortedString, customPrefixes), sortedString);
+      assert.strictEqual(
+        sortHelper(unsortedString, customPrefixes),
+        sortedString
+      );
     });
 
     it("Rails rb view component with special syntax", () => {
@@ -433,7 +436,10 @@ describe("Sorting", () => {
       const sortedString = `has_dom_class -> { 'bg-pink-500 text-white' }`;
       const unsortedString = `has_dom_class -> { 'text-white bg-pink-500' }`;
 
-      assert.strictEqual(sort(unsortedString, customPrefixes), sortedString);
+      assert.strictEqual(
+        sortHelper(unsortedString, customPrefixes),
+        sortedString
+      );
     });
   });
 
@@ -449,7 +455,7 @@ describe("Sorting", () => {
       "      container: twMerge('flex-col flex'),\n" +
       "    }";
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Tailwind merge multi strings", () => {
@@ -459,7 +465,7 @@ describe("Sorting", () => {
     const unsortedString =
       "twMerge('hover:bg-dark-red bg-red', 'p-3 bg-[#B91C1C]')";
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("Tailwind merge `", () => {
@@ -467,21 +473,21 @@ describe("Sorting", () => {
 
     const unsortedString = "twMerge(`lg:grid-cols-[1fr,auto] grid-cols-2`)";
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it(`Inside brackets twMerge(`, () => {
     const sortedString = `<aside className={twMerge('flex p-4')}>`;
     const unsortedString = `<aside className={twMerge(' p-4     flex    ')}>`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it(`Inside brackets w space twMerge(`, () => {
     const sortedString = `<aside className={ twMerge('flex p-4')}>`;
     const unsortedString = `<aside className={ twMerge(' p-4     flex    ')}>`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it(`Newline twMerge(`, () => {
@@ -496,7 +502,7 @@ describe("Sorting", () => {
       ),
     };`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it(`Complex newline clsx(`, () => {
@@ -519,7 +525,7 @@ describe("Sorting", () => {
         )}
       ></span>`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("clsx multi", () => {
@@ -529,21 +535,21 @@ describe("Sorting", () => {
     const sortedString = `clsx('bg-blue-500 text-base', { 'bg-blue-700 text-gray-100': isHovering })`;
     const unsortedString = `clsx('text-base bg-blue-500', { 'bg-blue-700 text-gray-100': isHovering })`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("clsx", () => {
     const sortedString = `clsx('bg-blue-500 text-base')`;
     const unsortedString = `clsx('text-base           bg-blue-500     ')`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("clsx kitchen sink", () => {
     const sortedString = `clsx('bg-pink-500 text-black', [1 && 'bar', { baz:false, bat:null }, ['hello', ['world']]], 'cya')`;
     const unsortedString = `clsx('text-black bg-pink-500', [1 && 'bar', { baz:false, bat:null }, ['hello', ['world']]], 'cya')`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("cva syntax multi", () => {
@@ -555,7 +561,7 @@ describe("Sorting", () => {
     const sortedString = `cva('bg-blue-500 text-white', { 'bg-blue-700 text-gray-100': isHovering })`;
     const unsortedString = `cva('text-white bg-blue-500', { 'bg-blue-700 text-gray-100': isHovering })`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("cva", () => {
@@ -578,29 +584,18 @@ describe("Sorting", () => {
       },
     })`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("allow _ prefix for ignored classes", () => {
     const sortedString = `<div class="flex _flex-col justify-center gap-6 bg-white _shadow-2xl p-8 border _hover:border-yellow-400 rounded-4xl w-lg custom_flex">`;
     const unsortedString = `<div class="_shadow-2xl justify-center custom_flex gap-6 _hover:border-yellow-400 bg-white _flex-col p-8 border flex rounded-4xl w-lg">`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 });
 
 describe("@apply Sorting", () => {
-  const { classesMap, pseudoSortOrder, customPrefixes } = defaultClassesMap();
-
-  function sort(unsortedString: string) {
-    return sortTailwind(
-      unsortedString,
-      classesMap,
-      pseudoSortOrder,
-      customPrefixes
-    );
-  }
-
   it("css", () => {
     const unsortedString = `
     .btn {
@@ -615,7 +610,7 @@ describe("@apply Sorting", () => {
     }
     `;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("nested css", () => {
@@ -630,7 +625,7 @@ describe("@apply Sorting", () => {
     }
     `;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("nested scss", () => {
@@ -657,7 +652,7 @@ describe("@apply Sorting", () => {
     }
     `;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("style block", () => {
@@ -682,7 +677,7 @@ describe("@apply Sorting", () => {
     </style>
     `;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("multiple applys", () => {
@@ -701,7 +696,7 @@ describe("@apply Sorting", () => {
     }
     `;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("media queries", () => {
@@ -728,7 +723,7 @@ describe("@apply Sorting", () => {
     }
     `;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("pseudo-classes and modifiers", () => {
@@ -755,7 +750,7 @@ describe("@apply Sorting", () => {
     }
     `;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("complex selectors", () => {
@@ -786,7 +781,7 @@ describe("@apply Sorting", () => {
     }
     `;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("important modifier", () => {
@@ -799,7 +794,7 @@ describe("@apply Sorting", () => {
       @apply !bg-blue-500 text-white;
     }`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("complex arbitrary values", () => {
@@ -812,7 +807,7 @@ describe("@apply Sorting", () => {
       @apply bg-[rgb(0,0,0)] text-[clamp(1rem,2vw,1.5rem)];
     }`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("apply and class sort", () => {
@@ -827,7 +822,7 @@ describe("@apply Sorting", () => {
       }
       </style>`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("mixed CSS and @apply", () => {
@@ -848,7 +843,7 @@ describe("@apply Sorting", () => {
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("css variables", () => {
@@ -893,7 +888,7 @@ describe("@apply Sorting", () => {
       }
     }`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("realistic component styles", () => {
@@ -954,7 +949,7 @@ describe("@apply Sorting", () => {
       }
     }`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("nested @apply with @if", () => {
@@ -981,7 +976,7 @@ describe("@apply Sorting", () => {
       }
     }`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("@apply with custom @", () => {
@@ -1012,7 +1007,7 @@ describe("@apply Sorting", () => {
       }
     }`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 
   it("mixed class formats", () => {
@@ -1031,6 +1026,6 @@ describe("@apply Sorting", () => {
       className={clsx('bg-blue-500 hover:bg-blue-600 hover:text-white', className)}>
     </div>`;
 
-    assert.strictEqual(sort(unsortedString), sortedString);
+    assert.strictEqual(sortHelper(unsortedString), sortedString);
   });
 });

@@ -14,7 +14,7 @@ const emptyConfig = {
   customPrefixes: [],
   categoryOrder: { sortOrder: [] },
   pseudoClassesOrder: { sortOrder: [] },
-  categories: {},
+  categories: {}
 };
 
 describe("getClassesMap", () => {
@@ -30,33 +30,39 @@ describe("getClassesMap", () => {
         ...emptyConfig,
         categories: {
           category1: ["class1", "class3"],
-          category2: ["class2", "class4"],
+          category2: ["class2", "class4"]
         },
         categoryOrder: { sortOrder: ["category2", "category1"] },
         pseudoClassesOrder: { sortOrder: ["hover", "focus"] },
         customPrefixes: ["tw-"],
-      }),
+        sectionOrder: ["customClasses", "classes", "pseudoClasses"]
+      })
     });
 
-    const { classesMap, pseudoSortOrder, customPrefixes } =
+    const { classesMap, pseudoSortOrder, sectionOrder, customPrefixes } =
       await getClassesMap();
 
     assert.deepStrictEqual(classesMap, {
       class1: 2,
       class2: 0,
       class3: 3,
-      class4: 1,
+      class4: 1
     });
     assert.deepStrictEqual(pseudoSortOrder, ["hover", "focus"]);
     assert.deepStrictEqual(customPrefixes, ["tw-"]);
+    assert.deepStrictEqual(sectionOrder, [
+      "customClasses",
+      "classes",
+      "pseudoClasses"
+    ]);
   });
 
   it("falls back to defaults if config is empty", async () => {
     mock({
-      ".tailwindsorterrc.json": JSON.stringify(emptyConfig),
+      ".tailwindsorterrc.json": JSON.stringify(emptyConfig)
     });
 
-    const { classesMap, pseudoSortOrder, customPrefixes } =
+    const { classesMap, pseudoSortOrder, sectionOrder, customPrefixes } =
       await getClassesMap();
 
     assert.ok(
@@ -65,6 +71,10 @@ describe("getClassesMap", () => {
     );
     assert.ok(pseudoSortOrder.length > 0, "should use default pseudoSortOrder");
     assert.ok(customPrefixes.length > 0, "should use default customPrefixes");
+    assert.ok(
+      sectionOrder[0] == "classes" && sectionOrder[1] == "customClasses",
+      "should use default sectionOrder"
+    );
   });
 
   it("falls back to defaults if sortOrder references missing category", async () => {
@@ -72,8 +82,8 @@ describe("getClassesMap", () => {
       ".tailwindsorterrc.json": JSON.stringify({
         ...emptyConfig,
         categories: { only: ["a"] },
-        categoryOrder: { sortOrder: ["only", "missing-category"] },
-      }),
+        categoryOrder: { sortOrder: ["only", "missing-category"] }
+      })
     });
 
     const result = await getClassesMap();
@@ -94,8 +104,8 @@ describe("getOptions", () => {
       ".tailwindsorterrc.json": JSON.stringify({
         ...emptyConfig,
         include: ["*.ts"],
-        exclude: ["temp/"],
-      }),
+        exclude: ["temp/"]
+      })
     });
 
     const result = await getOptions({});
@@ -109,19 +119,19 @@ describe("getOptions", () => {
       ".tailwindsorterrc.json": JSON.stringify({
         ...emptyConfig,
         include: ["./not-used/"],
-        exclude: ["**/also-not-used"],
-      }),
+        exclude: ["**/also-not-used"]
+      })
     });
 
     const result = await getOptions({
       include: "src/**/*.ts",
-      exclude: "ignore/**/*.ts",
+      exclude: "ignore/**/*.ts"
     });
 
     assert.deepStrictEqual(result.include, ["src/**/*.ts"]);
     assert.deepStrictEqual(result.exclude, [
       "ignore/**/*.ts",
-      ...defaultExclude,
+      ...defaultExclude
     ]);
   });
 
@@ -129,8 +139,8 @@ describe("getOptions", () => {
     mock({
       ".tailwindsorterrc.json": JSON.stringify({
         ...emptyConfig,
-        include: [],
-      }),
+        include: []
+      })
     });
 
     const exitStub = sinon.stub(process, "exit");
